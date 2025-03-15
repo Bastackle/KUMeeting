@@ -255,7 +255,7 @@ class _BuildingMapState extends State<BuildingMap> {
           ),
         ),
         floatingActionButton: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 10, 50, 10),
+          padding: const EdgeInsets.fromLTRB(10, 10, 50, 50),
           child: FloatingActionButton.extended(
             label: Text(
               'Reset',

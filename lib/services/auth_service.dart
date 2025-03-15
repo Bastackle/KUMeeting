@@ -41,7 +41,6 @@ class AuthService {
           signOut();
           throw Exception("บัญชีของคุณไม่ได้รับอนุญาตให้เข้าใช้งาน");
         }
-
         return user;
       }
     } catch (e) {
