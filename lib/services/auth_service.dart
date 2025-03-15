@@ -15,51 +15,41 @@ class AuthService {
 
       if (googleUser == null) return null;
 
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
+      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
+      UserCredential userCredential = await _auth.signInWithCredential(credential);
+      User? user = userCredential.user;
 
-      final googleUserEmail = googleUser.email;
-      String emailDomain = googleUserEmail.split('@')[1];
+      if(user!=null){
+        String emailDomain = user.email!.split('@')[1];
+        print(emailDomain);
+        if(emailDomain != allowDomain){
+          signOut();
+          throw Exception("e-mail ต้องเป็น @${allowDomain} เท่านั้น");
+        }
+        final querySnapshot = await _firestore
+            .collection("users")
+            .where("email", isEqualTo: user.email)
+            .limit(1)
+            .get();
 
-      print(emailDomain);
-      if (emailDomain != allowDomain) {
-        signOut();
-        throw Exception("e-mail ต้องเป็น @${allowDomain} เท่านั้น");
+        if (querySnapshot.docs.isEmpty) {
+          signOut();
+          throw Exception("บัญชีของคุณไม่ได้รับอนุญาตให้เข้าใช้งาน");
+        }
+
+        return user;
       }
-
-      final querySnapshot = await _firestore
-          .collection("users")
-          .where("email", isEqualTo: googleUserEmail)
-          .limit(1)
-          .get();
-
-      if (querySnapshot.docs.isEmpty) {
-        signOut();
-        throw Exception("บัญชีของคุณไม่ได้รับอนุญาตให้เข้าใช้งาน");
-      }
-
-      final userData = querySnapshot.docs.first.data();
-      bool isActive = userData["activeStatus"] ??
-          false;
-
-      if (!isActive) {
-        signOut();
-        throw Exception(
-            "บัญชีของคุณไม่มีสิทธิ์เข้าใช้งาน เนื่องจากคุณไม่ได้เป็นนิสิตหรือบุคลากรอีกต่อไป");
-      }
-      UserCredential userCredential =
-          await _auth.signInWithCredential(credential);
-      return userCredential.user;
     } catch (e) {
       String errorMessage = e.toString().replaceFirst("Exception: ", "");
       AlertBox.showErrorDialog(context, errorMessage);
       return null;
     }
+    return null;
   }
 
   Future<void> signOut() async {
