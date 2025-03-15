@@ -124,7 +124,7 @@ class _StdOrganiztionBookingFormState extends State<StdOrganiztionBookingForm> {
     data['date'] = _DateController.text;
     data['startTime'] = _startTimeController.text;
     data['endTime'] = _endTimeController.text;
-    data['people'] = _peopleController.text;
+    data['people'] = int.tryParse(_peopleController.text);
     data['status'] = status;
     return data;
   }

@@ -104,13 +104,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             onPressed: _isLoading
                                 ? null
                                 : () async {
-                                    await Future.delayed(Duration(seconds: 3));
                                     setState(() => _isLoading = true);
                                     User? user = await _authService
                                         .signInWithGoogle(context);
                                     setState(() => _isLoading = false);
 
                                     if (user != null) {
+                                      await Future.delayed(Duration(seconds: 3));
                                       Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
