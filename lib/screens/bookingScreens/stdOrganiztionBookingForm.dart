@@ -8,15 +8,13 @@ import 'package:project/widgets/confirm.dart';
 import 'package:project/widgets/successful.dart';
 
 class StdOrganiztionBookingForm extends StatefulWidget {
+  static const int MAXHOURS = 4;
   final room;
   final building;
   final userId;
 
-  StdOrganiztionBookingForm({
-    required this.room,
-    required this.building,
-    required this.userId
-  });
+  StdOrganiztionBookingForm(
+      {required this.room, required this.building, required this.userId});
 
   @override
   _StdOrganiztionBookingFormState createState() =>
@@ -39,7 +37,8 @@ class _StdOrganiztionBookingFormState extends State<StdOrganiztionBookingForm> {
   Future _getDepartments() async {
     List<String> organizationTypes = ['องค์กรนิสิต'];
 
-    List<Map<String, String>> departments = await UserService().getDepartments(organizationTypes);
+    List<Map<String, String>> departments =
+        await UserService().getDepartments(organizationTypes);
 
     setState(() {
       _departments = departments;
@@ -79,31 +78,42 @@ class _StdOrganiztionBookingFormState extends State<StdOrganiztionBookingForm> {
 
             Map<String, dynamic> data = toBody();
 
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return Center(child: CircularProgressIndicator(
-                    strokeWidth: 6,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                  ));
-                }
-            );
+            final startTime = _parseTimeOfDay(data['startTime']);
+            final endTime = _parseTimeOfDay(data['endTime']);
 
-            String response = await ReservationService().postReserve(data);
-
-            Navigator.of(context).pop();
-
-            if(response == 'ขออภัยครับ กำหนดการดังกล่าวถูกดำเนินการจองไว้แล้ว') {
-              AlertBox.showErrorDialog(context, response);
-            } else {
-              Map<String, dynamic>? reserveData = await ReservationService().getReserveById(response);
+            if (_isValidEndTime(startTime!, endTime!)) {
               showDialog(
                   context: context,
-                  barrierDismissible: false,
-                  builder: (BuildContext context) {
-                    return SuccessfulPopup(nextPage: reservationDtl(reserve: reserveData,));
-                  }
-              );
+                  builder: (context) {
+                    return Center(
+                        child: CircularProgressIndicator(
+                      strokeWidth: 6,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                    ));
+                  });
+
+              String response = await ReservationService().postReserve(data);
+
+              Navigator.of(context).pop();
+
+              if (response ==
+                  'ขออภัยครับ กำหนดการดังกล่าวถูกดำเนินการจองไว้แล้ว') {
+                AlertBox.showErrorDialog(context, response);
+              } else {
+                Map<String, dynamic>? reserveData =
+                    await ReservationService().getReserveById(response);
+                showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return SuccessfulPopup(
+                          nextPage: reservationDtl(
+                        reserve: reserveData,
+                      ));
+                    });
+              }
+            } else {
+              AlertBox.showErrorDialog(context, 'เวลาในการจองอย่างน้อย 1 ชั่วโมง และไม่เกิน ${StdOrganiztionBookingForm.MAXHOURS} ชั่วโมง');
             }
           },
           onNo: () {
@@ -180,14 +190,12 @@ class _StdOrganiztionBookingFormState extends State<StdOrganiztionBookingForm> {
                       fillColor: Colors.white.withOpacity(0.1),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                            color: Theme.of(context)
-                                .primaryColor),
+                        borderSide:
+                            BorderSide(color: Theme.of(context).primaryColor),
                       ),
                     ),
                   ),
                   SizedBox(height: 16),
-
                   DropdownButtonFormField<String>(
                     items: _departments
                         .map((Map<String, String> department) =>
@@ -212,14 +220,12 @@ class _StdOrganiztionBookingFormState extends State<StdOrganiztionBookingForm> {
                         fillColor: Colors.white.withOpacity(0.1),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                              color: Theme.of(context)
-                                  .primaryColor),
+                          borderSide:
+                              BorderSide(color: Theme.of(context).primaryColor),
                         ),
                         errorStyle:
                             TextStyle(fontFamily: "Mitr", color: Colors.white)),
-                    dropdownColor:
-                        Colors.grey[850],
+                    dropdownColor: Colors.grey[850],
                     style: TextStyle(
                       fontFamily: "Mitr",
                       fontWeight: FontWeight.w500,
@@ -243,7 +249,8 @@ class _StdOrganiztionBookingFormState extends State<StdOrganiztionBookingForm> {
                         _selectedDepartmentId = value;
                         _selectedDepartment = _departments
                             .firstWhere((dept) => dept['id'] == value)['name'];
-                        if(_selectedDepartment != "ชมรม") _selectedDepartment = null;
+                        if (_selectedDepartment != "ชมรม")
+                          _selectedDepartment = null;
                       });
                       print("Selected: $_selectedDepartment");
                     },
@@ -264,7 +271,8 @@ class _StdOrganiztionBookingFormState extends State<StdOrganiztionBookingForm> {
                               fontWeight: FontWeight.w500,
                               color: Colors.white70,
                             ),
-                            errorStyle: TextStyle(fontFamily: "Mitr", color: Colors.white),
+                            errorStyle: TextStyle(
+                                fontFamily: "Mitr", color: Colors.white),
                             filled: true,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -272,7 +280,8 @@ class _StdOrganiztionBookingFormState extends State<StdOrganiztionBookingForm> {
                             fillColor: Colors.white.withOpacity(0.1),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColor),
                             ),
                           ),
                           style: TextStyle(
@@ -315,9 +324,8 @@ class _StdOrganiztionBookingFormState extends State<StdOrganiztionBookingForm> {
                       fillColor: Colors.white.withOpacity(0.1),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                            color: Theme.of(context)
-                                .primaryColor),
+                        borderSide:
+                            BorderSide(color: Theme.of(context).primaryColor),
                       ),
                     ),
                     style: TextStyle(
@@ -332,14 +340,16 @@ class _StdOrganiztionBookingFormState extends State<StdOrganiztionBookingForm> {
                         context: context,
                         initialDate: now.add(Duration(days: 1)),
                         firstDate: now.add(Duration(days: 1)),
-                        lastDate: DateTime(now.year + 1),
+                        lastDate: now.add(Duration(days: 30)),
                         builder: (context, child) {
                           return Theme(
                             data: ThemeData.light().copyWith(
                               primaryColor: Theme.of(context).primaryColor,
                               hintColor: Theme.of(context).primaryColor,
-                              colorScheme: ColorScheme.light(primary: Theme.of(context).primaryColor),
-                              buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                              colorScheme: ColorScheme.light(
+                                  primary: Theme.of(context).primaryColor),
+                              buttonTheme: ButtonThemeData(
+                                  textTheme: ButtonTextTheme.primary),
                             ),
                             child: child!,
                           );
@@ -357,7 +367,6 @@ class _StdOrganiztionBookingFormState extends State<StdOrganiztionBookingForm> {
                       return null;
                     },
                   ),
-
                   SizedBox(
                     height: 16,
                   ),
@@ -388,8 +397,7 @@ class _StdOrganiztionBookingFormState extends State<StdOrganiztionBookingForm> {
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide(
-                                  color: Theme.of(context)
-                                      .primaryColor),
+                                  color: Theme.of(context).primaryColor),
                             ),
                           ),
                           style: TextStyle(
@@ -405,12 +413,17 @@ class _StdOrganiztionBookingFormState extends State<StdOrganiztionBookingForm> {
                               builder: (BuildContext context, Widget? child) {
                                 return Theme(
                                   data: ThemeData.light().copyWith(
-                                    primaryColor: Theme.of(context).primaryColor,
-                                    colorScheme: ColorScheme.light(primary: Theme.of(context).primaryColor),
-                                    buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                                    primaryColor:
+                                        Theme.of(context).primaryColor,
+                                    colorScheme: ColorScheme.light(
+                                        primary:
+                                            Theme.of(context).primaryColor),
+                                    buttonTheme: ButtonThemeData(
+                                        textTheme: ButtonTextTheme.primary),
                                     textButtonTheme: TextButtonThemeData(
                                       style: TextButton.styleFrom(
-                                        foregroundColor: Theme.of(context).primaryColor,
+                                        foregroundColor:
+                                            Theme.of(context).primaryColor,
                                       ),
                                     ),
                                   ),
@@ -423,13 +436,14 @@ class _StdOrganiztionBookingFormState extends State<StdOrganiztionBookingForm> {
                               },
                             );
                             if (pickedTime != null) {
-                              if(!_isWithinBusinessHours(pickedTime)){
-                                AlertBox.showErrorDialog(context, 'กรุณาเลือกเวลาในช่วง 9:00 - 18:00 น.');
+                              if (!_isWithinBusinessHours(pickedTime)) {
+                                AlertBox.showErrorDialog(context,
+                                    'กรุณาเลือกเวลาในช่วง 9:00 - 18:00 น.');
                               } else {
                                 _startTimeController.text =
                                     MaterialLocalizations.of(context)
                                         .formatTimeOfDay(pickedTime,
-                                        alwaysUse24HourFormat: true);
+                                            alwaysUse24HourFormat: true);
                               }
                             }
                           },
@@ -467,8 +481,7 @@ class _StdOrganiztionBookingFormState extends State<StdOrganiztionBookingForm> {
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide(
-                                  color: Theme.of(context)
-                                      .primaryColor),
+                                  color: Theme.of(context).primaryColor),
                             ),
                           ),
                           style: TextStyle(
@@ -479,7 +492,8 @@ class _StdOrganiztionBookingFormState extends State<StdOrganiztionBookingForm> {
                           ),
                           onTap: () async {
                             if (_startTimeController.text.isEmpty) {
-                              AlertBox.showErrorDialog(context, 'กรุณาเลือกเวลาเริ่มต้นก่อน');
+                              AlertBox.showErrorDialog(
+                                  context, 'กรุณาเลือกเวลาเริ่มต้นก่อน');
                             } else {
                               TimeOfDay? pickedTime = await showTimePicker(
                                 context: context,
@@ -487,29 +501,35 @@ class _StdOrganiztionBookingFormState extends State<StdOrganiztionBookingForm> {
                                 builder: (BuildContext context, Widget? child) {
                                   return Theme(
                                     data: ThemeData.light().copyWith(
-                                      primaryColor: Theme.of(context).primaryColor,
-                                      colorScheme: ColorScheme.light(primary: Theme.of(context).primaryColor),
-                                      buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                                      primaryColor:
+                                          Theme.of(context).primaryColor,
+                                      colorScheme: ColorScheme.light(
+                                          primary:
+                                              Theme.of(context).primaryColor),
+                                      buttonTheme: ButtonThemeData(
+                                          textTheme: ButtonTextTheme.primary),
                                       textButtonTheme: TextButtonThemeData(
                                         style: TextButton.styleFrom(
-                                          foregroundColor: Theme.of(context).primaryColor,
+                                          foregroundColor:
+                                              Theme.of(context).primaryColor,
                                         ),
                                       ),
                                     ),
                                     child: MediaQuery(
-                                      data: MediaQuery.of(context)
-                                          .copyWith(alwaysUse24HourFormat: true),
+                                      data: MediaQuery.of(context).copyWith(
+                                          alwaysUse24HourFormat: true),
                                       child: child!,
                                     ),
                                   );
                                 },
                               );
                               if (pickedTime != null) {
-                                if(!_isWithinBusinessHours(pickedTime)){
-                                  AlertBox.showErrorDialog(context, 'กรุณาเลือกเวลาในช่วง 9:00 - 18:00 น.');
+                                if (!_isWithinBusinessHours(pickedTime)) {
+                                  AlertBox.showErrorDialog(context,
+                                      'กรุณาเลือกเวลาในช่วง 9:00 - 18:00 น.');
                                 } else {
-                                  final startTime =
-                                  _parseTimeOfDay(_startTimeController.text);
+                                  final startTime = _parseTimeOfDay(
+                                      _startTimeController.text);
                                   final endTime = pickedTime;
 
                                   if (startTime != null &&
@@ -517,9 +537,10 @@ class _StdOrganiztionBookingFormState extends State<StdOrganiztionBookingForm> {
                                     _endTimeController.text =
                                         MaterialLocalizations.of(context)
                                             .formatTimeOfDay(pickedTime,
-                                            alwaysUse24HourFormat: true);
+                                                alwaysUse24HourFormat: true);
                                   } else {
-                                    AlertBox.showErrorDialog(context, 'เวลาในการจองอย่างน้อย 1 ชั่วโมง และไม่เกิน 4 ชั่วโมง');
+                                    AlertBox.showErrorDialog(context,
+                                        'เวลาในการจองอย่างน้อย 1 ชั่วโมง และไม่เกิน ${StdOrganiztionBookingForm.MAXHOURS} ชั่วโมง');
                                   }
                                 }
                               }
@@ -557,9 +578,8 @@ class _StdOrganiztionBookingFormState extends State<StdOrganiztionBookingForm> {
                       fillColor: Colors.white.withOpacity(0.1),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                            color: Theme.of(context)
-                                .primaryColor),
+                        borderSide:
+                            BorderSide(color: Theme.of(context).primaryColor),
                       ),
                     ),
                     style: TextStyle(
@@ -592,11 +612,9 @@ class _StdOrganiztionBookingFormState extends State<StdOrganiztionBookingForm> {
                     },
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.only(left: 20, right: 20),
-                      minimumSize:
-                          Size(double.infinity, 60),
+                      minimumSize: Size(double.infinity, 60),
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(15),
                       ),
                       backgroundColor: Theme.of(context).primaryColor,
                       foregroundColor: Colors.white,
@@ -632,7 +650,8 @@ TimeOfDay? _parseTimeOfDay(String time) {
 }
 
 bool _isWithinBusinessHours(TimeOfDay time) {
-  return time.hour >= 9 && (time.hour < 18 || (time.hour == 18 && time.minute == 0));
+  return time.hour >= 9 &&
+      (time.hour < 18 || (time.hour == 18 && time.minute == 0));
 }
 
 bool _isValidEndTime(TimeOfDay startTime, TimeOfDay endTime) {
@@ -643,7 +662,7 @@ bool _isValidEndTime(TimeOfDay startTime, TimeOfDay endTime) {
     return false;
   }
 
-  if (endDateTime.isAfter(startDateTime.add(Duration(hours: 4)))) {
+  if (endDateTime.isAfter(startDateTime.add(Duration(hours: StdOrganiztionBookingForm.MAXHOURS)))) {
     return false;
   }
   return true;

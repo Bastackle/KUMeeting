@@ -7,6 +7,7 @@ import 'package:project/widgets/confirm.dart';
 import 'package:project/widgets/successful.dart';
 
 class StudentBookingForm extends StatefulWidget {
+  static const int MAXHOURS = 2;
   final room;
   final building;
   final userId;
@@ -94,7 +95,7 @@ class _StudentBookingFormState extends State<StudentBookingForm> {
                       });
                 }
               } else {
-                AlertBox.showErrorDialog(context, 'เวลาในการจองอย่างน้อย 1 ชั่วโมง และไม่เกิน 2 ชั่วโมง');
+                AlertBox.showErrorDialog(context, 'เวลาในการจองอย่างน้อย 1 ชั่วโมง และไม่เกิน ${StudentBookingForm.MAXHOURS} ชั่วโมง');
               }
             },
             onNo: () {
@@ -218,7 +219,7 @@ class _StudentBookingFormState extends State<StudentBookingForm> {
                           context: context,
                           initialDate: now.add(Duration(days: 1)),
                           firstDate: now.add(Duration(days: 1)),
-                          lastDate: DateTime(now.year + 1),
+                          lastDate: now.add(Duration(days: 30)),
                           builder: (context, child) {
                             return Theme(
                               data: ThemeData.light().copyWith(
@@ -405,7 +406,7 @@ class _StudentBookingFormState extends State<StudentBookingForm> {
                                               .formatTimeOfDay(pickedTime,
                                                   alwaysUse24HourFormat: true);
                                     } else {
-                                      AlertBox.showErrorDialog(context, 'เวลาในการจองอย่างน้อย 1 ชั่วโมง และไม่เกิน 2 ชั่วโมง');
+                                      AlertBox.showErrorDialog(context, 'เวลาในการจองอย่างน้อย 1 ชั่วโมง และไม่เกิน ${StudentBookingForm.MAXHOURS} ชั่วโมง');
                                     }
                                   }
                                 }
@@ -531,7 +532,7 @@ bool _isValidEndTime(TimeOfDay startTime, TimeOfDay endTime) {
     return false;
   }
 
-  if (endDateTime.isAfter(startDateTime.add(Duration(hours: 2)))) {
+  if (endDateTime.isAfter(startDateTime.add(Duration(hours: StudentBookingForm.MAXHOURS)))) {
     return false;
   }
   return true;

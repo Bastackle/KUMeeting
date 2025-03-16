@@ -8,6 +8,7 @@ import 'package:project/widgets/confirm.dart';
 import 'package:project/widgets/successful.dart';
 
 class StaffBookingForm extends StatefulWidget {
+  static const int MAXHOURS = 6;
   final room;
   final building;
   final userId;
@@ -111,7 +112,7 @@ class _StaffBookingFormState extends State<StaffBookingForm> {
                         });
                   }
                 } else {
-                  AlertBox.showErrorDialog(context, 'เวลาในการจองอย่างน้อย 1 ชั่วโมง และไม่เกิน 2 ชั่วโมง');
+                  AlertBox.showErrorDialog(context, 'เวลาในการจองอย่างน้อย 1 ชั่วโมง และไม่เกิน ${StaffBookingForm.MAXHOURS} ชั่วโมง');
                 }
               },
               onNo: () {
@@ -294,7 +295,7 @@ class _StaffBookingFormState extends State<StaffBookingForm> {
                         context: context,
                         initialDate: now.add(Duration(days: 1)),
                         firstDate: now.add(Duration(days: 1)),
-                        lastDate: DateTime(now.year + 1),
+                        lastDate: now.add(Duration(days: 30)),
                         builder: (context, child) {
                           return Theme(
                             data: ThemeData.light().copyWith(
@@ -478,7 +479,7 @@ class _StaffBookingFormState extends State<StaffBookingForm> {
                                             alwaysUse24HourFormat: true
                                         );
                                   } else {
-                                    AlertBox.showErrorDialog(context, 'เวลาในการจองอย่างน้อย 1 ชั่วโมง และไม่เกิน 6 ชั่วโมง');
+                                    AlertBox.showErrorDialog(context, 'เวลาในการจองอย่างน้อย 1 ชั่วโมง และไม่เกิน ${StaffBookingForm.MAXHOURS} ชั่วโมง');
                                   }
                                 }
                               }
@@ -603,7 +604,7 @@ bool _isValidEndTime(TimeOfDay startTime, TimeOfDay endTime) {
     return false;
   }
 
-  if (endDateTime.isAfter(startDateTime.add(Duration(hours: 6)))) {
+  if (endDateTime.isAfter(startDateTime.add(Duration(hours: StaffBookingForm.MAXHOURS)))) {
     return false;
   }
 
