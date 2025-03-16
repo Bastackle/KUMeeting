@@ -18,6 +18,11 @@ This project is a mobile application designed for university community to easily
 * **Room Details:** Users can view detailed information about each meeting room, including equipment, capacity, and the building's location on campus.
 * **Reservation History:** Users can view their past reservations and track upcoming bookings for better planning.
 
+## Screenshots
+
+| ![Screenshot 1](screenshot/1.home) | ![Screenshot 2]() | ![Screenshot 3]() | ![Screenshot 4]() |
+|----------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|
+
 ## Technologies Used
 #### Frontend
 * Framework/Library: Flutter
