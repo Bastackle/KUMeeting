@@ -20,7 +20,7 @@ This project is a mobile application designed for university community to easily
 
 ## Screenshots
 
-| ![Screenshot 1](screenshots/1.home.png) | ![Screenshot 2](screenshots/3.roomDtl.png) | ![Screenshot 3](4.reserveForm.png) | ![Screenshot 4](6.history.png) |
+| ![Screenshot 1](screenshots/1.home.png) | ![Screenshot 2](screenshots/3.roomDtl.png) | ![Screenshot 3](screenshots/4.reserveForm.png) | ![Screenshot 4](screenshots/6.history.png) |
 |----------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|
 
 ## Technologies Used
