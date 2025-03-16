@@ -8,7 +8,7 @@ This project is a mobile application designed for university community to easily
 
 ## Features
 
-* **User Authentication (Email-based Login):** Users can log in using their organization-provided email addresses. **Registration is not available**, ensuring only university personnel can access the app with their institutional email accounts.
+* **User Authentication (Email-based Login):** Users can log in using their organization-provided email addresses. **Registration is not available**, ensuring only university community can access the app with their institutional email accounts.
 * **User Role Management:** The system categorizes users into different roles based on their status, such as students and staff. Each role has a different maximum booking duration, ensuring fair usage of meeting rooms.
 * **Meeting Room Reservation:** Users can browse available meeting rooms, view details, and make reservations based on time and room availability.
 * **Real-time Availability:** The app displays real-time availability of meeting rooms, ensuring that users can book rooms without conflicts.
