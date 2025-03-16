@@ -6,6 +6,8 @@ As a part of 01418342-65 Mobile Application Design and Development at the Comput
 
 This project is a mobile application designed for university community to easily reserve meeting rooms within the campus. The app allows users to browse available meeting rooms, check the schedule, and make reservations directly from their mobile devices. Built with Flutter for the front-end, Firebase for backend functionality and data management, ensuring seamless user experience and real-time updates.
 
+**Demo Video:** https://drive.google.com/file/d/16zSBEGwhstnRXOju2_Y0o9eR5HUM1xoJ/view?usp=share_link
+
 ## Features
 
 * **User Authentication (Email-based Login):** Users can log in using their organization-provided email addresses. **Registration is not available**, ensuring only university community can access the app with their institutional email accounts.
