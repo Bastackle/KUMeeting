@@ -1,16 +1,28 @@
-# project
+# KUMeeting - University Meeting Room Reservation System
 
-A new Flutter project.
+![Image](https://github.com/user-attachments/assets/5a12fb12-8268-48cf-a37d-15daa2019743)
 
-## Getting Started
+As a part of 01418342-65 Mobile Application Design and Development at the Computer Science department of Kasetsart University Sriracha Campus
 
-This project is a starting point for a Flutter application.
+This project is a mobile application designed for university community to easily reserve meeting rooms within the campus. The app allows users to browse available meeting rooms, check the schedule, and make reservations directly from their mobile devices. Built with Flutter for the front-end, Firebase for backend functionality and data management, ensuring seamless user experience and real-time updates.
 
-A few resources to get you started if this is your first Flutter project:
+## Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+* **User Authentication (Email-based Login):** Users can log in using their organization-provided email addresses. **Registration is not available**, ensuring only university personnel can access the app with their institutional email accounts.
+* **User Role Management:** The system categorizes users into different roles based on their status, such as students and staff. Each role has a different maximum booking duration, ensuring fair usage of meeting rooms.
+* **Meeting Room Reservation:** Users can browse available meeting rooms, view details, and make reservations based on time and room availability.
+* **Real-time Availability:** The app displays real-time availability of meeting rooms, ensuring that users can book rooms without conflicts.
+* **Search and Filters:** Users can search and filter meeting rooms by location or capacity to find the best option for their needs.
+* **Reservation Management:** Users can view, edit, or cancel their reservations easily through their reservation history.
+* **User Profile Management:** Users can update their personal information, including their contact details, within their profile settings.
+* **Room Details:** Users can view detailed information about each meeting room, including equipment, capacity, and the building's location on campus.
+* **Reservation History:** Users can view their past reservations and track upcoming bookings for better planning.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Technologies Used
+#### Frontend
+* Framework/Library: Flutter
+#### Backend & Database
+* Firebase Firestore: Cloud-based NoSQL database for managing reservations and user data.
+* Firebase Authentication: Secure user authentication and authorization.
+#### Other API
+* Google Maps API: Displays building of meeting room locations within the university for easy navigation.
