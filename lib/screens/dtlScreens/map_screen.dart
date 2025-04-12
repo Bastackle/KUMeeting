@@ -16,7 +16,7 @@ class BuildingMap extends StatefulWidget {
 
 class _BuildingMapState extends State<BuildingMap> {
   late LatLng latLngBuilding;
-  String googleApiKey = "AIzaSyCJWcPP4y9BsatfQDHFTGxjtovqxHhP7Ls";
+  String googleApiKey = "YOUR GOOGLE API KEY";
   GoogleMapController? mapController;
   double? latitude, longitude;
   final Set<Marker> markers = {};
